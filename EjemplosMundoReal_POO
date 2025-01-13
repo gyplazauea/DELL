@@ -1,0 +1,76 @@
+# hotel_reservas.py
+
+class Habitacion:
+    def __init__(self, numero, tipo, precio):
+        """Inicializa una habitación con un número, tipo y precio."""
+        self.numero = numero
+        self.tipo = tipo
+        self.precio = precio
+        self.reservada = False
+
+    def reservar(self):
+        """Reserva la habitación si no está ya reservada."""
+        if not self.reservada:
+            self.reservada = True
+            return True
+        return False
+
+    def liberar(self):
+        """Libera la habitación."""
+        self.reservada = False
+
+    def __str__(self):
+        """Devuelve una representación en cadena de la habitación."""
+        estado = "Reservada" if self.reservada else "Disponible"
+        return f"Habitación {self.numero} ({self.tipo}) - Precio: ${self.precio} - Estado: {estado}"
+
+
+class Cliente:
+    def __init__(self, nombre, documento_identidad):
+        """Inicializa un cliente con nombre y documento de identidad."""
+        self.nombre = nombre
+        self.documento_identidad = documento_identidad
+
+    def __str__(self):
+        """Devuelve una representación en cadena del cliente."""
+        return f"Cliente: {self.nombre}, ID: {self.documento_identidad}"
+
+
+class Reserva:
+    def __init__(self, cliente, habitacion):
+        """Inicializa una reserva con un cliente y una habitación."""
+        self.cliente = cliente
+        self.habitacion = habitacion
+
+    def realizar_reserva(self):
+        """Realiza la reserva de la habitación para el cliente."""
+        if self.habitacion.reservar():
+            print(f"Reserva realizada para {self.cliente} en {self.habitacion}.")
+        else:
+            print(f"La habitación {self.habitacion.numero} ya está reservada.")
+
+    def cancelar_reserva(self):
+        """Cancela la reserva y libera la habitación."""
+        self.habitacion.liberar()
+        print(f"Reserva cancelada para {self.cliente} en {self.habitacion}.")
+
+
+# Ejemplo de uso
+if __name__ == "__main__":
+    # Crear habitaciones
+    habitacion1 = Habitacion(101, "Individual", 50)
+    habitacion2 = Habitacion(102, "Doble", 80)
+
+    # Crear un cliente
+    cliente1 = Cliente("Juan Pérez", "12345678")
+
+    # Realizar una reserva
+    reserva1 = Reserva(cliente1, habitacion1)
+    reserva1.realizar_reserva()  # Reserva exitosa
+
+    # Intentar reservar la misma habitación
+    reserva2 = Reserva(cliente1, habitacion1)
+    reserva2.realizar_reserva()  # Debería fallar
+
+    # Cancelar la reserva
+    reserva1.cancelar_reserva()
